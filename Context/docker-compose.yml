@@ -1,0 +1,21 @@
+# Lo necesario para ejecutar la aplicación en local
+services:
+
+  # PostgresSQL
+  postgres-db:
+    container_name: shortnest-db_postgres
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: shortnest
+      POSTGRES_PASSWORD: shortnest123
+      POSTGRES_DB: shortnest-db
+    ports:
+      - 5432:5432
+    networks:
+      - shortnest-network
+
+# Red para conectar los contenedores (opcional)
+networks:
+  shortnest-network:
+    driver: bridge
