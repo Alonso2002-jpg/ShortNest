@@ -18,6 +18,19 @@ builder.Services.AddTransient<ExecuteScripts>();
 builder.Services.AddScoped<UrlStorageService>();
 builder.Services.AddScoped<UrlStorageMapper>();
 
+// Agrega CORS a los servicios
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:5173") // Asegúrate de reemplazar esto con la URL de tu cliente
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -46,6 +59,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigin");
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
 app.Run();

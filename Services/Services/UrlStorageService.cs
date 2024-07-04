@@ -6,11 +6,11 @@ using AppContext = Context.Context.AppContext;
 
 namespace Services.Services;
 
+
 public class UrlStorageService
 {
     private readonly AppContext _context;
     private readonly UrlStorageMapper _mapper;
-
     public UrlStorageService(AppContext context, UrlStorageMapper mapper)
     {
         _context = context;

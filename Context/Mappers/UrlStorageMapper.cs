@@ -1,16 +1,25 @@
 ﻿using Context.Models;
 using Context.ViewModels;
-
+using Microsoft.Extensions.Configuration;
 namespace Context.Mappers;
 
 public class UrlStorageMapper
 {
+    private readonly IConfiguration _configuration;
+    public UrlStorageMapper(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
     public UrlStorage ToEntity(UrlStorageCreate create)
     {
+        string frontendUrl = _configuration["FrontendURL"];
+        string shortUrl = $"{frontendUrl}/{Guid.NewGuid().ToString().Substring(0, 5)}";
+
         return new UrlStorage
         {
             UrlReal = create.UrlReal,
-            UrlShortest = create.UrlShortest
+            UrlShortest = shortUrl
         };
     }
     
@@ -30,4 +39,5 @@ public class UrlStorageMapper
             UrlShortest = urlStorage.UrlShortest
         };
     }
+    
 }
