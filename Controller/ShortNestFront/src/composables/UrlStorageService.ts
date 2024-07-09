@@ -12,6 +12,10 @@ export class UrlStorageService {
     return await axios.get<UrlStorage>(`${this.route}/${id}`);
   }
   
+  public async getUrlStorageByShortUrl(shortUrl: string) {
+    return await axios.get<UrlStorage>(`${this.route}/urlShort/${shortUrl}`);
+  }
+  
     public async createUrlStorage(urlStorage: UrlStorage) {
         return await axios.post<UrlStorage>(this.route, urlStorage);
     }

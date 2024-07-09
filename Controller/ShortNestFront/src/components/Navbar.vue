@@ -21,7 +21,7 @@ const items = ref([
 </script>
 
 <template>
-  <div class="flex align-items-center justify-content-between mx-3">
+  <div class="flex align-items-center justify-content-between px-3 bg-black-alpha-10">
     <div class="card flex align-items-center">
       <h2>ShortNest</h2>
       <nav class="items">
@@ -37,7 +37,7 @@ const items = ref([
     </div>
     <div class="flex gap-2">
       <Button type="button" severity="contrast" label="Login" icon="pi pi-users"/>
-      <Button type="button" severity="secondary" label="Registro" icon="pi pi-users"/>
+      <Button type="button" severity="secondary" label="Registro" icon="pi pi-users" class="button-hover" />
     </div>
   </div>
 </template>
@@ -45,5 +45,29 @@ const items = ref([
 <style scoped>
 .items a:hover{
   background: #bbbbbb;
+}
+
+.p-button-contrast{
+  background: #c2ba92;
+  color: #44342e;
+  border-color: #44342e;
+}
+
+.p-button-contrast:not(:disabled):hover{
+  background: #b7b68b;
+  color: #44342e;
+  border-color: #44342e;
+}
+
+.button-hover{
+  background: #44342e;
+  color: #c2ba92;
+  border-color: #c2ba92;
+}
+
+.button-hover:not(:disabled):hover{
+  background: #603e35;
+  color: #c2ba92;
+  border-color: #c2ba92;
 }
 </style>

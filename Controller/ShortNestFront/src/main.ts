@@ -11,8 +11,10 @@ import Menubar from "primevue/menubar";
 import Image from "primevue/image";
 import Card from "primevue/card";
 import InputText from "primevue/inputtext";
+import router from "./router.ts";
 
 const app = createApp(App);
+app.use(router)
 app.use(PrimeVue, {
     theme: {
         preset: Aura

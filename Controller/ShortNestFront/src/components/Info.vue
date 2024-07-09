@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex justify-content-center align-items-center bg-black-alpha-90" style="height: 12.8lvh">
+  <div class="flex justify-content-center align-items-center bg-black-alpha-90" style="height: 14.5lvh">
     <h1 class="text-gray-100">¿What's up with ShortNest?</h1>
   </div>
   <div class="container m-5">
@@ -28,9 +28,7 @@
 </template>
 
 <style scoped>
-
-</style>
-
-<style scoped>
-
+p{
+  color:black;
+}
 </style>

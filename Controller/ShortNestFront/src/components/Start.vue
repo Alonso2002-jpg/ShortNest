@@ -13,13 +13,25 @@ import Shortener from "./Shortener.vue";
       <p class="text-center">ShortNest is a URL shortener that allows you to shorten long URLs to short URLs.</p>
       <Shortener></Shortener>
       <div class="flex justify-content-center gap-5 mt-5">
-        <Button type="button" severity="secondary" label="Get Started" icon="pi pi-users"/>
-        <Button type="button" severity="secondary" label="More Info" icon="pi pi-users"/>
+        <Button type="button" label="Get Started" icon="pi pi-users"/>
+        <Button type="button" label="More Info" icon="pi pi-users"/>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+.p-button{
+  background: #44342e;
+  color: #c2ba92;
+  border-color: #c2ba92;
+}
+
+.p-button:not(:disabled):hover{
+  background: #603e35;
+  color: #c2ba92;
+  border-color: #c2ba92;
+}
 
 </style>

@@ -13,8 +13,7 @@ public class UrlStorageMapper
     
     public UrlStorage ToEntity(UrlStorageCreate create)
     {
-        string frontendUrl = _configuration["FrontendURL"];
-        string shortUrl = $"{frontendUrl}/{Guid.NewGuid().ToString().Substring(0, 5)}";
+        string shortUrl = Guid.NewGuid().ToString().Substring(0, 5);
 
         return new UrlStorage
         {

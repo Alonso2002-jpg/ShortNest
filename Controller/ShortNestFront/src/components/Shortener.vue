@@ -3,9 +3,12 @@ import {ref} from "vue";
 import { UrlStorageService } from "../composables/UrlStorageService";
 import {UrlStorage} from "../models/UrlStorage.ts";
 
+const frontUrl = import.meta.env.VITE_FRONT_URL
+
 let urlStorage = ref('')
 let badUrl = ref(false)
 let goodProcess = ref(false)
+
     
 let urlStorageService = new UrlStorageService()
 let shorten = async () =>{
@@ -17,7 +20,7 @@ let shorten = async () =>{
   urlStorageToSave.urlReal = urlStorage.value
   try {
     const response = await urlStorageService.createUrlStorage(urlStorageToSave)
-    urlStorage.value = response.data.urlShortest
+    urlStorage.value = frontUrl + '/' + response.data.urlShortest
     goodProcess.value = true
     badUrl.value = false
   }catch (e){
@@ -36,7 +39,10 @@ let isValidUrl = () => {
     <p v-if="goodProcess" class="text-1xl m-0 font-bold">URL Acortada correctamente</p>
     <div class="flex gap-2">
       <InputText id="username" class="w-full" v-model="urlStorage" aria-describedby="url-user" />
-      <Button @click="shorten" severity="contrast" label="Shorten" icon="pi pi-arrow-down-left-and-arrow-up-right-to-center" />
+      <div class="flex" v-if="goodProcess">
+        <Button @click="shorten" severity="contrast" class="px-3" icon="pi pi-clipboard" />
+        <Button @click="goodProcess = false" severity="contrast" icon="pi pi-refresh" />
+      </div>
     </div>
     <small v-if="!badUrl" id="username-help">Ingrese la URL que desea acortar.</small>
     <small v-if="badUrl" id="username-help" class="text-red-600">Ingrese una URL valida para acortar.</small>
@@ -44,5 +50,16 @@ let isValidUrl = () => {
 </template>
 
 <style scoped>
+.p-button{
+  background: #44342e;
+  color: #c2ba92;
+  border-color: #c2ba92;
+}
+
+.p-button:hover{
+  background: #603e35;
+  color: #c2ba92;
+  border-color: #c2ba92;
+}
 
 </style>
