@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <div class="flex justify-content-center align-items-center bg-black-alpha-90" style="height: 14.5lvh">
-    <h1 class="text-gray-100">¿What's up with ShortNest?</h1>
+  <div class="flex justify-content-center align-items-center" style="height: 14.5lvh; background: var(--second-color); color: var(--fourth-color);">
+    <h1>¿What's up with ShortNest?</h1>
   </div>
   <div class="container m-5">
     <Card>
@@ -31,4 +31,10 @@
 p{
   color:black;
 }
+
+.p-card-body{
+  background: var(--fourth-color);
+  color: var(--second-color);
+}
+
 </style>

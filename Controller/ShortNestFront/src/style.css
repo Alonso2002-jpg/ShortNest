@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
+:root {
+    --first-color: #323031;
+    --second-color: #3d3b3c;
+    --third-color: #7f7979;
+    --fourth-color: #C1BDB3;
+    --five-color: #5f5b6b;
+}
+
 body{
-    background-color: #c2ba92;
+    background-color: #c1bdb3;
     margin: 0;
     padding: 0;
     font-family: "Quicksand", sans-serif;
@@ -14,9 +22,3 @@ body{
     color: #c2ba92;
     border-color: #c2ba92;
 }
-
-.color1 {color: #281611;}
-.color2 {color: #44342e;}
-.color3 {color: #70604e;}
-.color4 {color: #a49679;}
-.color5 {color: #c2ba92;}

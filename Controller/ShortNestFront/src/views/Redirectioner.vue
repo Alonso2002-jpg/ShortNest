@@ -21,7 +21,8 @@ const seeURL = async () => {
 </script>
 
 <template>
-  <div class="flex justify-content-center align-items-center">
+  <div class="flex flex-column justify-content-center align-items-center" style="height: 92.5lvh">
+    <p class="text-xl">Haz click en el siguiente boton para acceder a tu ruta!</p>
     <Button @click="seeURL" type="button" severity="secondary" label="Continue" size="large" icon="pi pi-play"/>
   </div>
 </template>

@@ -23,15 +23,15 @@ import Shortener from "./Shortener.vue";
 <style scoped>
 
 .p-button{
-  background: #44342e;
-  color: #c2ba92;
-  border-color: #c2ba92;
+  background: var(--second-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
 }
 
 .p-button:not(:disabled):hover{
-  background: #603e35;
-  color: #c2ba92;
-  border-color: #c2ba92;
+  background: var(--first-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
 }
 
 </style>

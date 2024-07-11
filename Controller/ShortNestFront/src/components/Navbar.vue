@@ -37,7 +37,7 @@ const items = ref([
     </div>
     <div class="flex gap-2">
       <Button type="button" severity="contrast" label="Login" icon="pi pi-users"/>
-      <Button type="button" severity="secondary" label="Registro" icon="pi pi-users" class="button-hover" />
+      <Button type="button" severity="secondary" label="Register" icon="pi pi-users" class="button-hover" />
     </div>
   </div>
 </template>
@@ -48,26 +48,26 @@ const items = ref([
 }
 
 .p-button-contrast{
-  background: #c2ba92;
-  color: #44342e;
-  border-color: #44342e;
+  background: var(--fourth-color);
+  color: var(--second-color);
+  border-color: var(--second-color);
 }
 
 .p-button-contrast:not(:disabled):hover{
-  background: #b7b68b;
+  background: #b2aea5;
   color: #44342e;
   border-color: #44342e;
 }
 
 .button-hover{
-  background: #44342e;
-  color: #c2ba92;
-  border-color: #c2ba92;
+  background: var(--second-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
 }
 
 .button-hover:not(:disabled):hover{
-  background: #603e35;
-  color: #c2ba92;
-  border-color: #c2ba92;
+  background: var(--first-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
 }
 </style>
