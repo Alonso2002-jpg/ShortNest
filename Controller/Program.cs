@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("http://localhost:5173") // Asegúrate de reemplazar esto con la URL de tu cliente
+                .WithOrigins("*") // Asegúrate de reemplazar esto con la URL de tu cliente
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -44,7 +44,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var scriptExecutor = services.GetRequiredService<ExecuteScripts>();
-    var scriptDirectory = Path.Combine(Directory.GetCurrentDirectory(), "scripts");
+    var scriptDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "scripts");
     scriptExecutor.ExecuteSQLFiles(scriptDirectory);
 }
 {

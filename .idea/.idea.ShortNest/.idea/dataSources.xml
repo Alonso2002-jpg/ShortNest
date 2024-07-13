@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/shortnest-db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="postgres@aws-cadisa-prueba.czu4gcygcrao.eu-north-1.rds.amazonaws.com" uuid="0d7c8284-49a1-4ec5-95ac-2baac553cc78">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://aws-cadisa-prueba.czu4gcygcrao.eu-north-1.rds.amazonaws.com:5432/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
