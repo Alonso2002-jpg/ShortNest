@@ -1,14 +1,31 @@
 ﻿<script setup lang="ts">
 import homeImage from "../assets/img/home-imagen.png";
 import Shortener from "./Shortener.vue";
+import {useDeviceStore} from "../stores/useDeviceStore.ts";
+import {onBeforeUnmount, onMounted} from "vue";
+
+const store = useDeviceStore();
+
+const handleResize = () => {
+  store.updateDeviceType();
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  handleResize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <template>
-  <div class="flex justify-content-between align-items-center">
-    <div class="card flex justify-center align-items-center " style="width: 70vw; height: 80lvh; margin-left: 10lvw">
+  <div class="flex align-items-center" :class="{'justify-content-between':!store.isMobile, 'justify-content-center':store.isMobile}">
+    <div v-if="!store.isMobile" class="card flex justify-center align-items-center" style="width: 70vw; height: 80lvh; margin-left: 10lvw">
       <Image :src="homeImage" alt="Image" width="500" />
     </div>
-    <div style="margin-right: 10lvw">
+    <div :class="{'m-3 my-8': store.isMobile}" :style="!store.isMobile ? 'margin-right: 10lvw' : ''">
       <h1 class="text-center">Welcome to ShortNest</h1>
       <p class="text-center">ShortNest is a URL shortener that allows you to shorten long URLs to short URLs.</p>
       <Shortener></Shortener>

@@ -12,9 +12,12 @@ import Image from "primevue/image";
 import Card from "primevue/card";
 import InputText from "primevue/inputtext";
 import router from "./router.ts";
+import {createPinia} from "pinia";
+import Drawer from "primevue/drawer";
 
 const app = createApp(App);
 app.use(router)
+app.use(createPinia())
 app.use(PrimeVue, {
     theme: {
         preset: Aura
@@ -25,5 +28,6 @@ app.component('Menubar', Menubar);
 app.component('Image', Image);
 app.component('Card', Card);
 app.component('InputText', InputText)
+app.component('Drawer', Drawer)
 
 app.mount('#app')

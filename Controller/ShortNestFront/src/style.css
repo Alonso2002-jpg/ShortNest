@@ -17,8 +17,10 @@ body{
     color: #281611;
 }
 
-.p-button{
-    background: #44342e;
-    color: #c2ba92;
-    border-color: #c2ba92;
+a{
+    text-decoration: none;
+}
+
+.mob-nav a {
+    color: var(--fourth-color);
 }

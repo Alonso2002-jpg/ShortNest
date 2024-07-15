@@ -47,7 +47,7 @@ let isValidUrl = () => {
 
 <template>
   <div class="flex flex-column gap-2 py-3">
-    <p v-if="goodProcess" class="text-1xl m-0 font-bold">URL Acortada correctamente</p>
+    <p v-if="goodProcess" class="text-1xl m-0 font-bold">URL Successfully Shortened</p>
     <div class="flex gap-2">
       <InputText id="username" class="w-full" v-model="urlStorage" aria-describedby="url-user" />
       <Button v-if="!goodProcess" @click="shorten" severity="contrast" label="Shorten" class="px-4" icon="pi pi-arrow-down-left-and-arrow-up-right-to-center" />
@@ -56,9 +56,9 @@ let isValidUrl = () => {
         <Button @click="goodProcess = false; copied=false" severity="contrast" icon="pi pi-refresh" />
       </div>
     </div>
-    <small v-if="!badUrl && !copied" id="username-help">Ingrese la URL que desea acortar.</small>
-    <small v-if="badUrl" id="username-help" class="text-red-900">Ingrese una URL valida para acortar.</small>
-    <small v-if="copied" id="username-help">Copiado!</small>
+    <small v-if="!badUrl && !copied" id="username-help">Enter the URL you want to shorten.</small>
+    <small v-if="badUrl" id="username-help" class="text-red-900">Enter a valid URL to shorten.</small>
+    <small v-if="copied" id="username-help">Copied!</small>
   </div>
 </template>
 
