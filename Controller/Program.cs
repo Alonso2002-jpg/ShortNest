@@ -44,7 +44,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var scriptExecutor = services.GetRequiredService<ExecuteScripts>();
-    var scriptDirectory = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "scripts");
+    var scriptDirectory = app.Environment.IsDevelopment() ? Path.Combine(Directory.GetCurrentDirectory(),"scripts") : Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "scripts");
     scriptExecutor.ExecuteSQLFiles(scriptDirectory);
 }
 {
