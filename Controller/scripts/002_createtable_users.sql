@@ -9,16 +9,18 @@
     username varchar(255) not null,
     password varchar(255) not null,
     createdat timestamp default CURRENT_TIMESTAMP not null,
-    updated_at timestamp default CURRENT_TIMESTAMP not null
+    updatedat timestamp default CURRENT_TIMESTAMP not null
 );
 
-create table user_roles
+create table userroles
 (
     id        uuid
         constraint user_roles_pk
             primary key,
-    user_id   uuid
+    userid   uuid
         constraint user_roles_fk
-            references users,
-    name_role varchar(50)
+            references users not null,
+    rolename varchar(50) 
+                constraint check_role_name
+                     check ( rolename in ('ADMIN', 'USER') )
 );

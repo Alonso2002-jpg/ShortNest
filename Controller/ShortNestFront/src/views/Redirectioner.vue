@@ -27,7 +27,7 @@ const seeURL = async () => {
 </script>
 
 <template>
-  <div class="flex flex-column justify-content-center align-items-center" style="height: 92.5lvh">
+  <div class="flex flex-column justify-content-center align-items-center" style="height: 77.5lvh">
     <p v-if="routeExist" class="text-xl">Haz click en el siguiente boton para acceder a tu ruta!</p>
     <h1 v-else>URL no encontrada</h1>
     <Button v-if="routeExist" @click="seeURL" type="button" severity="secondary" label="Continue" size="large" icon="pi pi-play"/>

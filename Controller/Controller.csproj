@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <Folder Include="ShortNestFront\public\" />
+      <Folder Include="ShortNestFront\src\middlewares\" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
 ﻿import { createRouter, createWebHistory } from 'vue-router'
 import Redirectioner from "./views/Redirectioner.vue";
 import Home from "./views/Home.vue";
+import Login from "./views/Login.vue";
+import Register from "./views/Register.vue";
 
 export default createRouter({
     history: createWebHistory(),
@@ -13,5 +15,17 @@ export default createRouter({
             path: '/:id',
             component: Redirectioner,
         },
+        {
+            path: '/login',
+            component: Login
+        },
+        {
+            path: '/register',
+            component: Register
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: '/'
+        }
     ],
 })

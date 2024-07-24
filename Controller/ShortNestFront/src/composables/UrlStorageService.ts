@@ -4,6 +4,7 @@ import {UrlStorage} from "../models/UrlStorage.ts";
 export class UrlStorageService {
   
   private readonly route = `${import.meta.env.VITE_BASE_URL}/UrlStorage`;
+  
   public async getAllUrlStorage() {
     return await axios.get<UrlStorage>(this.route);
   }

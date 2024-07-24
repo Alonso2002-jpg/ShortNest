@@ -1,7 +1,17 @@
 ﻿<script setup lang="ts">
 import {onBeforeUnmount, onMounted, ref} from "vue";
 import {useDeviceStore} from "../stores/useDeviceStore.ts";
+import {useRouter} from "vue-router";
+import {useAuthStore} from "../stores/useAuthStore.ts";
+const router = useRouter();
+const authStore = useAuthStore();
 const store = useDeviceStore();
+const token = localStorage.getItem('token');
+console.log(token)
+const redirectTo = (path:string) => {
+  router.push(path);
+};
+
 const items = ref([
   {
     label: 'Home',
@@ -64,9 +74,12 @@ onBeforeUnmount(() => {
         </div>
       </Drawer>
     </div>
-    <div v-if="!store.isMobile" class="flex gap-2">
-      <Button type="button" severity="contrast" label="Login" icon="pi pi-users"/>
-      <Button type="button" severity="secondary" label="Register" icon="pi pi-users" class="button-hover" />
+    <div v-if="!store.isMobile && !token" class="flex gap-2">
+      <Button type="button" severity="contrast" label="Login" @click="redirectTo('/login')" icon="pi pi-users"/>
+      <Button type="button" severity="secondary" label="Register" @click="redirectTo('/register')" icon="pi pi-users" class="button-hover" />
+    </div>
+    <div v-if="!store.isMobile && token" class="flex gap-2">
+      <Button type="button" severity="secondary" label="Logout" @click="authStore.clearAuth();redirectTo('/login');" icon="pi pi-sign-out" class="button-hover" />
     </div>
   </div>
 </template>

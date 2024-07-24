@@ -1,4 +1,5 @@
 ﻿using Context.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 
@@ -16,12 +17,14 @@ public class UrlStorageController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "ADMIN")]
     public ActionResult<UrlStorageResponse> GetAll()
     {
         return Ok(_urlStorageService.GetAll());
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "ADMIN")]
     public ActionResult<UrlStorageResponse> GetById(Guid id)
     {
         return Ok(_urlStorageService.GetById(id));
@@ -46,12 +49,14 @@ public class UrlStorageController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "USER,ADMIN")]
     public ActionResult<UrlStorageResponse> Update([FromBody] UrlStorageUpdate urlStorage, Guid id)
     {
         return Ok(_urlStorageService.Update(urlStorage, id));
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "ADMIN")]
     public ActionResult Delete(Guid id)
     {
         _urlStorageService.Delete(id);

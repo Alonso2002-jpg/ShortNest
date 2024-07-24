@@ -24,3 +24,7 @@ a{
 .mob-nav a {
     color: var(--fourth-color);
 }
+body .p-inputtext:focus {
+    border-color: var(--third-color) !important; /* Cambia el color del borde */
+    box-shadow: 0 0 0 0.2rem rgba(169, 169, 169, 0.25) !important; /* Cambia el color de la sombra */
+}
