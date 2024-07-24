@@ -28,13 +28,13 @@ if(window.localStorage.getItem('token') !== null){
 }
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBK3Tt1BnReZaeUMJgbtaRFLYIkvbEXayk",
-    authDomain: "shortnest-597fc.firebaseapp.com",
-    projectId: "shortnest-597fc",
-    storageBucket: "shortnest-597fc.appspot.com",
-    messagingSenderId: "731444649467",
-    appId: "1:731444649467:web:617fc0e1ba0dbd405bbf5e",
-    measurementId: "G-HMK79YT45G"
+    apiKey: import.meta.env.VITE_API_KEY_FRBASE,
+    authDomain:import.meta.env.VITE_AUTH_DOMAIN_FRBASE,
+    projectId: import.meta.env.VITE_PROY_ID_FRBASE,
+    storageBucket: import.meta.env.VITE_STOR_BUCKET_FRBASE,
+    messagingSenderId: import.meta.env.VITE_SENDER_ID_FRBASE,
+    appId: import.meta.env.VITE_APP_ID_FRBASE,
+    measurementId: import.meta.env.VITE_MEASUREMENT_ID_FRBASE
 };
 
 initializeApp(firebaseConfig);
