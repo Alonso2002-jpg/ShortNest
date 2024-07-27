@@ -4,11 +4,15 @@ import axios from "axios";
 import {Register} from "../models/Register.ts";
 import {Login} from "../models/Login.ts";
 import {TokenResponse} from "../models/TokenResponse.ts";
+import {getAuth, GoogleAuthProvider, signInWithPopup, TwitterAuthProvider} from "firebase/auth";
 
 export const useAuthStore = defineStore('auth',{
     state: () => ({
         token:ref(''),
         route: `${import.meta.env.VITE_BASE_URL}/Auth`,
+        googleProvider: new GoogleAuthProvider(),
+        xProvider: new TwitterAuthProvider(),
+        auth : getAuth(),
     }),
     actions: {
         async login(login:Login){
@@ -21,9 +25,12 @@ export const useAuthStore = defineStore('auth',{
                 throw error;
             }
         },
-        async loginWithGoogle(token:TokenResponse){
+        async loginWithGoogle(){
 
             try {
+                const result:any = await signInWithPopup(this.auth, this.googleProvider);
+                const token = new TokenResponse();
+                token.token = result.user.accessToken;
                 const response = await axios.post(`${this.route}/login/google`, token);
                 this.setToken(response.data.token)
                 window.location.href = '/';
@@ -31,8 +38,11 @@ export const useAuthStore = defineStore('auth',{
                 throw error;
             }
         },
-        async loginWithX(token:TokenResponse){
+        async loginWithX(){
             try {
+                const result:any = await signInWithPopup(this.auth, this.xProvider);
+                const token = new TokenResponse();
+                token.token = result.user.accessToken;
                 const response = await axios.post(`${this.route}/login/x`, token);
                 this.setToken(response.data.token)
                 window.location.href = '/';

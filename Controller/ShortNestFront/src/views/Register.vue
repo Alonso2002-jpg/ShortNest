@@ -1,15 +1,16 @@
 ﻿<script setup lang="ts">
 import { ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import {email, minLength, required, sameAs} from '@vuelidate/validators';
+import {email, minLength, required} from '@vuelidate/validators';
 import {ErrorRef} from "../models/ErrorRef.ts";
 import {Register} from "../models/Register.ts";
-import fb from "../assets/img/facebook.svg";
 import x from "../assets/img/x.svg";
 import google from "../assets/img/google.svg";
 import {useRouter} from "vue-router";
+import {useAuthStore} from "../stores/useAuthStore.ts";
 
 const router = useRouter();
+const auth = useAuthStore();
 
 const redirectTo = (path:string) => {
   router.push(path);
@@ -23,7 +24,7 @@ const rules = {
   email: { required, email },
   username: { required },
   password: { required, minLength: minLength(8) },
-  confirmPassword: { required, minLength: minLength(8), sameAs: sameAs('password')},
+  confirmPassword: { required, minLength: minLength(8)},
 };
 
 const v$ = useVuelidate(rules, form);
@@ -32,7 +33,7 @@ const submitForm = () => {
   v$.value.$validate();
   if (!v$.value.$invalid) {
     errors.value = []
-    console.log('Form submitted', form.value);
+    auth.register(form.value);
   }else{
     errors.value = []
     v$.value.$errors.forEach(error => {
@@ -41,8 +42,7 @@ const submitForm = () => {
       errorRef.message = error.$message.toString();
       errors.value.push(errorRef)
     })
-
-    console.log(errors.value)
+    console.log(errors)
   }
 };
 </script>
@@ -63,13 +63,10 @@ const submitForm = () => {
         <div class="text-center">
           <h2 class="text-6xl">Create your account</h2>
           <div class="flex gap-3 align-items-center justify-content-center" style="margin-top: 6lvh; margin-bottom: 6lvh">
-            <Button outlined rounded class="border-black-alpha-40">
-            <Image :src="fb"></Image>
-            </Button>
-            <Button outlined rounded class="border-black-alpha-40">
+            <Button outlined rounded class="border-black-alpha-40" @click="auth.loginWithGoogle()">
               <Image :src="google"></Image>
             </Button>
-            <Button outlined rounded class="border-black-alpha-40">
+            <Button outlined rounded class="border-black-alpha-40" @click="auth.loginWithX()">
               <Image :src="x"></Image>
             </Button>
           </div>
@@ -144,7 +141,7 @@ const submitForm = () => {
           </div>
           <div class="field flex justify-content-center align-items-center gap-3 text-center">
             <div>
-              <label for="confpass" class="text-xl text-black-alpha-90">Password</label>
+              <label for="pass" class="text-xl text-black-alpha-90">Password</label>
               <Password
                   v-model="form.password"
                   placeholder="Password"

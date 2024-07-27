@@ -7,16 +7,11 @@ import {ErrorRef} from "../models/ErrorRef.ts";
 import {useRouter} from "vue-router";
 import google from "../assets/img/google.svg";
 import x from "../assets/img/x.svg";
-import { GoogleAuthProvider,TwitterAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import {useAuthStore} from "../stores/useAuthStore.ts";
-import {TokenResponse} from "../models/TokenResponse.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
-const googleProvider = new GoogleAuthProvider();
-const xProvider = new TwitterAuthProvider();
-const auth = getAuth();
 const form = ref(new Login());
 const errors = ref([new ErrorRef()])
 const rules = {
@@ -27,20 +22,15 @@ const v$ = useVuelidate(rules, form);
 
 const loginWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const token = new TokenResponse();
-    token.token = result.user.accessToken;
-    await authStore.loginWithGoogle(token)
+    await authStore.loginWithGoogle()
   } catch (error) {
+    console.log(error)
   }
 };
 
 const loginWithX = async () => {
   try {
-    const result = await signInWithPopup(auth, xProvider);
-    const token = new TokenResponse();
-    token.token = result.user.accessToken;
-    await authStore.loginWithX(token)
+    await authStore.loginWithX()
   } catch (error) {
     console.log(error)
   }
