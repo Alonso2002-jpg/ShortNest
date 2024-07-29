@@ -12,7 +12,7 @@ interface DecodedToken {
 export const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
 
     const token = localStorage.getItem('token');
-
+    console.log(from.meta.roles)
     if (!token) {
         next('/login');
     } else {
