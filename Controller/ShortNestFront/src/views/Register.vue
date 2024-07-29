@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { ref } from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import {email, minLength, required} from '@vuelidate/validators';
 import {ErrorRef} from "../models/ErrorRef.ts";
@@ -8,10 +8,15 @@ import x from "../assets/img/x.svg";
 import google from "../assets/img/google.svg";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "../stores/useAuthStore.ts";
+import {useDeviceStore} from "../stores/useDeviceStore.ts";
 
 const router = useRouter();
 const auth = useAuthStore();
+const store = useDeviceStore();
 
+const handleResize = () => {
+  store.updateDeviceType();
+};
 const redirectTo = (path:string) => {
   router.push(path);
 };
@@ -29,6 +34,14 @@ const rules = {
 
 const v$ = useVuelidate(rules, form);
 
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  handleResize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 const submitForm = () => {
   v$.value.$validate();
   if (!v$.value.$invalid) {
@@ -48,8 +61,8 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div class="flex w-full" style="height: 100lvh;width: 100lvw">
-    <div class="bg-black-alpha-10 w-6 flex justify-content-center">
+  <div v-if="!store.isMobile" class="flex w-full" style="height: 100lvh;width: 100lvw">
+    <div class="bg-black-alpha-10 w-6 flex justify-content-center h-full">
       <section class="flex flex-column justify-content-center align-items-center">
         <h1 class="text-7xl">Welcome to ShortNest!</h1>
         <p class="text-3xl">Come with us and discover more than a simple URL</p>
@@ -169,6 +182,118 @@ const submitForm = () => {
             <Button severity="contrast" type="submit" size="large" outlined rounded class="w-30rem text-black-alpha-90 hover:text-white-alpha-90">Register me!</Button>
           </div>
         </form>
+    </div>
+  </div>
+  <div v-if="store.isMobile">
+    <div class="h-full p-8">
+      <div class="text-center">
+        <h2 class="text-4xl">Welcome buddy!</h2>
+        <div class="flex gap-3 align-items-center justify-content-center" style="margin-top: 6lvh; margin-bottom: 4lvh">
+          <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90" @click="auth.loginWithGoogle()">
+            <Image :src="google"></Image>
+          </Button>
+          <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90 " @click="auth.loginWithX()">
+            <Image :src="x"></Image>
+          </Button>
+        </div>
+        <p class="text-xl" style="margin-bottom: 3lvh">Or use your email to register</p>
+      </div>
+      <b class="text-md">Personal Info</b>
+      <Divider></Divider>
+      <form @submit.prevent="submitForm">
+        <div class="field flex justify-content-center align-items-center gap-3 text-center">
+          <div>
+            <label for="name" class="text-md text-black-alpha-90">Name</label>
+            <InputText
+                id="name"
+                type="text"
+                v-model="form.name"
+                placeholder="Name"
+                style="width: 40lvw;"
+                class="my-2"
+            />
+            <div class="mb-2" v-if="errors.find(e => e.property == 'username')">
+              <span v-if="!v$?.form?.name?.required" class="text-red-100">{{errors.find( e=> e.property == 'name')?.message}}</span>
+            </div>
+          </div>
+          <div>
+            <label for="lastname" class="text-md text-black-alpha-90">Lastname</label>
+            <InputText
+                id="lastname"
+                type="text"
+                v-model="form.lastname"
+                placeholder="Lastname"
+                style="width: 40lvw;"
+                class="my-2"
+            />
+            <div class="mb-2" v-if="errors.find(e => e.property == 'username')">
+              <span v-if="!v$?.form?.lastname?.required" class="text-red-100">{{errors.find( e=> e.property == 'lastname')?.message}}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="flex flex-column justify-content-center align-items-center">
+            <label for="email" class="text-md text-black-alpha-90">Email</label>
+            <InputText
+                id="email"
+                type="email"
+                v-model="form.email"
+                placeholder="Email"
+                class="my-2"
+                style="width: 50lvw"
+            />
+          </div>
+          <div class="mb-2" v-if="errors.find(e => e.property == 'username')">
+            <span v-if="!v$?.form?.email?.required" class="text-red-100">{{errors.find( e=> e.property == 'email')?.message}}</span>
+          </div>
+        </div>
+        <b class="text-md text-right">User Info</b>
+        <Divider></Divider>
+        <div>
+          <div class="field flex flex-column justify-content-center align-items-center">
+            <label for="username" class="text-md text-black-alpha-90">Username</label>
+            <InputText
+                id="username"
+                type="text"
+                v-model="form.username"
+                placeholder="Username"
+                class="my-2"
+                style="width: 50lvw"
+            />
+          </div>
+          <div class="mb-2" v-if="errors.find(e => e.property == 'username')">
+            <span v-if="!v$?.form?.username?.required" class="text-red-100">{{errors.find( e=> e.property == 'username')?.message}}</span>
+          </div>
+        </div>
+        <div class="field flex justify-content-center align-items-center gap-3 text-center">
+          <div>
+            <label for="pass" class="text-md text-black-alpha-90">Password</label>
+            <Password
+                v-model="form.password"
+                placeholder="Password"
+                inputClass="my-2"
+                inputStyle="width: 40lvw;"
+            />
+          </div>
+          <div>
+            <label for="confpass" class="text-md text-black-alpha-90">Confirm Password</label>
+            <Password
+                v-model="form.confirmPassword"
+                placeholder="Confirm Password"
+                inputClass="my-2"
+                inputStyle="width: 40lvw;"
+            />
+            <div class="flex flex-column mb-4" v-if="errors.find(e => e.property == 'confirmPassword')">
+              <span class="text-red-100">{{errors.find( e=> e.property == 'confirmPassword')?.message}}</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-center">Or</p>
+        <b class="text-md" @click="redirectTo('/login')">¿Do you already have an account?</b>
+        <div class="field text-center" style="margin-top: 3lvh">
+          <Button severity="contrast" type="submit" size="large" outlined rounded class="w-10 text-black-alpha-90 hover:text-white-alpha-90">Register me!</Button>
+        </div>
+      </form>
     </div>
   </div>
 </template>

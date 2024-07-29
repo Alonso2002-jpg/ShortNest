@@ -20,7 +20,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div>
-    <div class="flex justify-content-center align-items-center" style="height: 14.5lvh; background: var(--second-color); color: var(--fourth-color);">
+    <div class="flex justify-content-center align-items-center" :class="{'text-xs':store.isMobile}" style="height: 14.5lvh; background: var(--second-color); color: var(--fourth-color);">
       <h1>¿What's up with ShortNest?</h1>
     </div>
     <div class="container m-5">

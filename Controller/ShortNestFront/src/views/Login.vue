@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { ref } from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import {minLength, required} from '@vuelidate/validators';
 import {Login} from "../models/Login.ts";
@@ -8,9 +8,15 @@ import {useRouter} from "vue-router";
 import google from "../assets/img/google.svg";
 import x from "../assets/img/x.svg";
 import {useAuthStore} from "../stores/useAuthStore.ts";
+import {useDeviceStore} from "../stores/useDeviceStore.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const store = useDeviceStore();
+
+const handleResize = () => {
+  store.updateDeviceType();
+};
 
 const form = ref(new Login());
 const errors = ref([new ErrorRef()])
@@ -19,6 +25,15 @@ const rules = {
   password: { required, minLength: minLength(8) },
 };
 const v$ = useVuelidate(rules, form);
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  handleResize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 
 const loginWithGoogle = async () => {
   try {
@@ -69,7 +84,7 @@ const redirectTo = (path:string) => {
 </script>
 
 <template>
-  <div class="flex w-full" style="height: 100lvh;width: 100lvw">
+  <div v-if="!store.isMobile" class="flex w-full" style="height: 100lvh;width: 100lvw">
   <div class="w-6 h-full div-cont p-8">
       <div class="text-center">
         <h2 class="text-6xl">Login Now!</h2>
@@ -123,7 +138,7 @@ const redirectTo = (path:string) => {
         </div>
       </form>
     </div>
-  <div class="bg-black-alpha-10 w-6 flex justify-content-center">
+  <div class="bg-black-alpha-10 w-6 flex justify-content-center h-full">
       <section class="flex flex-column justify-content-center align-items-center">
         <h1 class="text-7xl">Hi again, buddy!</h1>
         <p class="text-3xl">Don't stop being with us and come here, log in now</p>
@@ -132,6 +147,61 @@ const redirectTo = (path:string) => {
           <Button severity="contrast" type="submit" size="large" outlined @click="redirectTo('/register')" rounded class="w-20rem text-black-alpha-90 hover:text-white-alpha-90">Go to register</Button>
         </div>
       </section>
+    </div>
+  </div>
+  <div v-if="store.isMobile">
+    <div class="w-full h-full p-8">
+      <div class="text-center">
+        <h2 class="text-4xl">Hi again, buddy!</h2>
+        <div class="flex gap-3 align-items-center justify-content-center" style="margin-top: 6lvh; margin-bottom: 4lvh">
+          <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90" @click="loginWithGoogle()">
+            <Image :src="google"></Image>
+          </Button>
+          <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90 " @click="loginWithX()">
+            <Image :src="x"></Image>
+          </Button>
+        </div>
+        <p class="text-xl" style="margin-bottom: 3lvh">Or use your email to login</p>
+        <div class="flex flex-column mb-4" v-if="errors.find(e => e.property == 'usernotfound')">
+          <span class="text-red-600">{{errors.find( e=> e.property == 'usernotfound')?.message}}</span>
+        </div>
+      </div>
+
+      <form @submit.prevent="submitForm" class="text-center">
+        <div class="field flex flex-column justify-content-center align-items-center">
+          <label for="username" class="text-lg text-black-alpha-90">Username</label>
+          <InputText
+              id="username"
+              type="text"
+              v-model="form.username"
+              placeholder="Username"
+              style="width: 70lvw;"
+              class="my-2"
+          />
+
+        </div>
+        <div class="mb-2" v-if="errors.find(e => e.property == 'username')">
+          <span class="text-red-600">{{errors.find( e=> e.property == 'username')?.message}}</span>
+        </div>
+        <div class="field flex flex-column justify-content-center align-items-center my-5">
+          <label for="password" class="text-lg text-black-alpha-90">Password</label>
+          <Password
+              v-model="form.password"
+              placeholder="password"
+              inputStyle="width: 70lvw;"
+              inputClass="my-2"
+          />
+        </div>
+        <div class="flex flex-column mb-4" v-if="errors.find(e => e.property == 'password')">
+          <span class="text-red-600">{{errors.find( e=> e.property == 'password')?.message}}</span>
+        </div>
+        <b class="text-lg" @click="redirectTo('/register')">¿Don't you have an account?</b>
+        <p>Or</p>
+        <b class="text-lg cursor-pointer hover:text-gray-600 transition-duration-300" style="margin-top:3lvh">¿Do you forgot your password?</b>
+        <div class="text-center" style="margin-top:  5lvh">
+          <Button severity="contrast" type="submit" size="large" outlined rounded class=" w-10 text-black-alpha-90 hover:text-white-alpha-90">Login me!</Button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
