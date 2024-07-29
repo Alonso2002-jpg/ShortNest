@@ -66,9 +66,12 @@ onBeforeUnmount(() => {
           <p><a href="/"> <i class="pi pi-star"></i> Features</a></p>
           <p><a href="/"> <i class="pi pi-dollar"></i> Pricing</a></p>
           <p><a href="/"> <i class="pi pi-envelope"></i> Contact</a></p>
-          <div class="flex justify-content-between my-8">
+          <div v-if="!token" class="flex justify-content-between my-8">
             <Button type="button" severity="secondary" label="Login" @click="redirectTo('/login')" icon="pi pi-user"/>
             <Button type="button" severity="secondary" label="Register" @click="redirectTo('/register')" icon="pi pi-users" />
+          </div>
+          <div v-if="token" class="flex justify-content-center my-8">
+            <Button type="button" severity="secondary" label="Logout" @click="authStore.clearAuth();redirectTo('/login');" icon="pi pi-sign-out" />
           </div>
         </div>
       </Drawer>
