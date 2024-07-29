@@ -18,7 +18,8 @@ public class UrlStorageMapper
         return new UrlStorage
         {
             UrlReal = create.UrlReal,
-            UrlShortest = shortUrl
+            UrlShortest = shortUrl,
+            UserId = create.UserId
         };
     }
     

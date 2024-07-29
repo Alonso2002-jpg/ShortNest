@@ -34,7 +34,12 @@ public class AppContext : DbContext
             .HasMany(u => u.UserRoles)
             .WithOne(ur => ur.User)
             .HasForeignKey(ur => ur.UserId);
-
+        
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.UrlStorages)
+            .WithOne(us => us.User)
+            .HasForeignKey(us => us.UserId);
+        
         base.OnModelCreating(modelBuilder);
     }
 }

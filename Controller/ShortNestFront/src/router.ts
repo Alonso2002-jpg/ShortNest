@@ -4,7 +4,6 @@ import Home from "./views/Home.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Unauthorized from "./views/Unauthorized.vue";
-import {authGuard} from "./middlewares/AuthGuard.ts";
 
 export default createRouter({
     history: createWebHistory(),
@@ -16,8 +15,8 @@ export default createRouter({
         {
             path: '/:id',
             component: Redirectioner,
-            meta: { roles: ['ADMIN'] },
-            beforeEnter: authGuard
+            // meta: { roles: ['ADMIN'] },
+            // beforeEnter: authGuard
         },
         {
             path: '/login',

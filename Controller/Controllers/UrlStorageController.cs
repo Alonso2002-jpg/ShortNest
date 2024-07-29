@@ -1,4 +1,5 @@
-﻿using Context.ViewModels;
+﻿using System.Security.Claims;
+using Context.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
@@ -10,10 +11,14 @@ namespace Controller.Controllers;
 public class UrlStorageController : ControllerBase
 {
     private readonly UrlStorageService _urlStorageService;
+    private readonly UserService _userService;
+    private readonly JwtService _jwtService;
 
-    public UrlStorageController(UrlStorageService urlStorageService)
+    public UrlStorageController(UrlStorageService urlStorageService, JwtService jwtService, UserService userService)
     {
         _urlStorageService = urlStorageService;
+        _jwtService = jwtService;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -45,6 +50,12 @@ public class UrlStorageController : ControllerBase
     [HttpPost]
     public ActionResult<UrlStorageResponse> Add([FromBody] UrlStorageCreate urlStorage)
     {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        if (token != "")
+        {
+            var username = GetUsername(token);
+            urlStorage.UserId = _userService.GetByUsername(username).Id;
+        }
         return Ok(_urlStorageService.Add(urlStorage));
     }
     
@@ -62,5 +73,19 @@ public class UrlStorageController : ControllerBase
         _urlStorageService.Delete(id);
 
         return Ok();
+    }
+
+    private string GetUsername(string token)
+    {
+        List<Claim> claims;
+        try
+        {
+            claims= _jwtService.DecodeToken(token).Claims.ToList();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Token is invalid");
+        }
+        return claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
     }
 }

@@ -15,4 +15,5 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     
     public List<UserRole> UserRoles { get; set; }
+    public List<UrlStorage> UrlStorages { get; set; }
 }
