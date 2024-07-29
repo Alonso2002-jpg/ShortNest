@@ -67,8 +67,8 @@ onBeforeUnmount(() => {
           <p><a href="/"> <i class="pi pi-dollar"></i> Pricing</a></p>
           <p><a href="/"> <i class="pi pi-envelope"></i> Contact</a></p>
           <div class="flex justify-content-between my-8">
-            <Button type="button" severity="secondary" label="Login" icon="pi pi-user"/>
-            <Button type="button" severity="secondary" label="Register" icon="pi pi-users" />
+            <Button type="button" severity="secondary" label="Login" @click="redirectTo('/login')" icon="pi pi-user"/>
+            <Button type="button" severity="secondary" label="Register" @click="redirectTo('/register')" icon="pi pi-users" />
           </div>
         </div>
       </Drawer>
