@@ -7,7 +7,6 @@ const router = useRouter();
 const authStore = useAuthStore();
 const store = useDeviceStore();
 const token = localStorage.getItem('token');
-console.log(token)
 const redirectTo = (path:string) => {
   router.push(path);
 };
@@ -47,7 +46,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="flex align-items-center justify-content-between px-3 bg-black-alpha-10">
     <div class="card flex align-items-center">
-      <h2>ShortNest</h2>
+      <h2 @click="router.push('/')" class="cursor-pointer">ShortNest</h2>
       <nav v-if="!store.isMobile" class="items">
         <ul class="flex align-items-center justify-content-center list-none gap-4">
           <li v-for="item in items" :key="item.label">

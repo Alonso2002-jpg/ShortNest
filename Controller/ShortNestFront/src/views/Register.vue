@@ -62,12 +62,14 @@ const submitForm = () => {
     <div class="w-6 h-full div-cont p-8">
         <div class="text-center">
           <h2 class="text-6xl">Create your account</h2>
-          <div class="flex gap-3 align-items-center justify-content-center" style="margin-top: 6lvh; margin-bottom: 6lvh">
-            <Button outlined rounded class="border-black-alpha-40" @click="auth.loginWithGoogle()">
+          <div class="flex gap-3 align-items-center justify-content-center" style="margin-top: 6lvh; margin-bottom: 4lvh">
+            <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90" @click="auth.loginWithGoogle()">
               <Image :src="google"></Image>
+              <p>Login with Google</p>
             </Button>
-            <Button outlined rounded class="border-black-alpha-40" @click="auth.loginWithX()">
+            <Button outlined rounded class="border-black-alpha-40 text-black-alpha-90 " @click="auth.loginWithX()">
               <Image :src="x"></Image>
+              <p>Login with X</p>
             </Button>
           </div>
           <p class="text-4xl" style="margin-bottom: 3lvh">Or use your email to register</p>

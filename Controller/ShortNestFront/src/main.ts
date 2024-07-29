@@ -24,7 +24,6 @@ import axios from "axios";
 if(window.localStorage.getItem('token') !== null){
     const token = window.localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    console.log(axios.defaults.headers);
 }
 
 const firebaseConfig = {
