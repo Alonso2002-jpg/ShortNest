@@ -9,7 +9,6 @@
     --six-color: #e0dfd4;
     --seven-color: #adacaa;
 }
-
 body{
     background-color: #c1bdb3;
     margin: 0;
@@ -34,3 +33,4 @@ body .p-inputtext:focus {
 body .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
     background-color: transparent;
 }
+

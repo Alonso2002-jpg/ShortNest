@@ -89,6 +89,12 @@ public class UrlStorageController : ControllerBase
 
         return Ok();
     }
+    
+    [HttpPost("CheckSitePass")]
+    public ActionResult<bool> CheckSitePass([FromBody] CheckSitePass checkSitePass)
+    {
+        return Ok(_urlStorageService.CheckValidSitePass(checkSitePass.SitePass, checkSitePass.UrlShort));
+    }
 
     private string GetUsername(string token)
     {

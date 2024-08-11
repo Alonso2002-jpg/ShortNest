@@ -21,7 +21,7 @@ public class UrlStorageMapper
             UrlShortest = shortUrl,
             UserId = create.UserId,
             WithPass = create.WithPass ?? false,
-            SitePass = create.SitePass == null ? BCrypt.Net.BCrypt.HashPassword(create.SitePass) : null
+            SitePass = create.SitePass != null ? BCrypt.Net.BCrypt.HashPassword(create.SitePass) : null
         };
     }
     

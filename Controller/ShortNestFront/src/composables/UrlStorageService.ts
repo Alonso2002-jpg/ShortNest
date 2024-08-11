@@ -32,4 +32,8 @@ export class UrlStorageService {
     public async deleteUrlStorage(id: string) {
         return await axios.delete(`${this.route}/${id}`);
     }
+
+  public async checkSitePass(urlShort: string, sitePass: string) {
+    return await axios.post(`${this.route}/CheckSitePass`, { urlShort, sitePass });
+  }
 }

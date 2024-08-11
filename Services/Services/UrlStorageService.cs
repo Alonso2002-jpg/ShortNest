@@ -101,4 +101,11 @@ public class UrlStorageService
         _context.UrlStorages.Remove(urlStorage);
         _context.SaveChanges();
     }
+
+    public bool CheckValidSitePass(string sitePass, string urlShortest)
+    {
+        var urlShort = _context.UrlStorages.FirstOrDefault(x => x.UrlShortest == urlShortest);
+
+        return BCrypt.Net.BCrypt.Verify(sitePass, urlShort.SitePass);
+    }
 }

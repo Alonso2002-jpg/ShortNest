@@ -8,6 +8,7 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import Button from "primevue/button";
 import "primeicons/primeicons.css";
+
 import Menubar from "primevue/menubar";
 import Image from "primevue/image";
 import Card from "primevue/card";
@@ -30,6 +31,7 @@ import ProgressSpinner from 'primevue/progressspinner';
 import ToastService from 'primevue/toastservice';
 import Toast from "primevue/toast";
 import Dialog from 'primevue/dialog';
+import ToggleSwitch from 'primevue/toggleswitch';
 
 if(window.localStorage.getItem('token') !== null){
     const token = window.localStorage.getItem('token');
@@ -52,7 +54,12 @@ app.use(router)
 app.use(createPinia())
 app.use(PrimeVue, {
     theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+            prefix: 'p',
+            darkModeSelector: 'system',
+            cssLayer: false
+        }
     }
 });
 app.use(ConfirmationService);
@@ -75,5 +82,6 @@ app.component('ConfirmDialog', ConfirmDialog)
 app.component('Toast', Toast)
 app.component('ProgressSpinner', ProgressSpinner)
 app.component('Dialog', Dialog)
+app.component('ToggleSwitch', ToggleSwitch)
 
 app.mount('#app')
