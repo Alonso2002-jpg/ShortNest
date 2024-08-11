@@ -13,6 +13,10 @@ export class UrlStorageService {
     return await axios.get<UrlStorage>(`${this.route}/${id}`);
   }
   
+  public async getUrlStorageByUserId(){
+    return await axios.get<UrlStorage[]>(`${this.route}/user`);
+  }
+  
   public async getUrlStorageByShortUrl(shortUrl: string) {
     return await axios.get<UrlStorage>(`${this.route}/urlShort/${shortUrl}`);
   }
@@ -26,6 +30,6 @@ export class UrlStorageService {
     }
     
     public async deleteUrlStorage(id: string) {
-        return await axios.delete<UrlStorage>(`${this.route}/${id}`);
+        return await axios.delete(`${this.route}/${id}`);
     }
 }

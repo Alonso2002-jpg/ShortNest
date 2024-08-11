@@ -33,6 +33,13 @@ public class UrlStorageService
         
         return _mapper.ToResponse(urlStorageFind);
     }
+    
+    public List<UrlStorageResponse> GetByUserId(Guid UserId)
+    {
+        return _context.UrlStorages.Where(x => x.UserId == UserId)
+            .Select(x => _mapper.ToResponse(x)).ToList();
+        
+    }
 
     public UrlStorageResponse GetByUrlReal(string UrlReal)
     {

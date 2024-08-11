@@ -34,6 +34,21 @@ public class UrlStorageController : ControllerBase
     {
         return Ok(_urlStorageService.GetById(id));
     }
+
+    [HttpGet("user")]
+    [Authorize(Roles = "USER,ADMIN")]
+    public ActionResult<UrlStorageResponse> GetByUserId()
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var userId = new Guid();
+        if (token != "")
+        {
+            var username = GetUsername(token);
+            userId = _userService.GetByUsername(username).Id ?? new Guid();
+        }
+        
+        return Ok(_urlStorageService.GetByUserId(userId));
+    }
     
     [HttpGet("urlReal/{urlReal}")]
     public ActionResult<UrlStorageResponse> GetByUrlReal(string urlReal)
@@ -67,7 +82,7 @@ public class UrlStorageController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize(Roles = "ADMIN, USER")]
     public ActionResult Delete(Guid id)
     {
         _urlStorageService.Delete(id);

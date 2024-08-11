@@ -7,4 +7,5 @@
     public createdAt: Date = new Date()
     public updatedAt: Date = new Date()
     public email: string = ''
+    public roles: string[] = []
 }

@@ -6,6 +6,8 @@
     --third-color: #7f7979;
     --fourth-color: #C1BDB3;
     --five-color: #5f5b6b;
+    --six-color: #e0dfd4;
+    --seven-color: #adacaa;
 }
 
 body{
@@ -27,4 +29,8 @@ a{
 body .p-inputtext:focus {
     border-color: var(--third-color) !important; /* Cambia el color del borde */
     box-shadow: 0 0 0 0.2rem rgba(169, 169, 169, 0.25) !important; /* Cambia el color de la sombra */
+}
+
+body .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
+    background-color: transparent;
 }

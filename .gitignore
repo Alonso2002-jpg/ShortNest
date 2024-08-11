@@ -8,3 +8,6 @@ riderModule.iml
 
 .env
 .env.prod
+
+appsettings
+appsettings.Production

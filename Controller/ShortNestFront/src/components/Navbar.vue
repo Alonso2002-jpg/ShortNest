@@ -14,19 +14,23 @@ const redirectTo = (path:string) => {
 const items = ref([
   {
     label: 'Home',
-    icon: 'pi pi-home'
+    icon: 'pi pi-home',
+    url: ''
   },
   {
     label: 'Features',
-    icon: 'pi pi-star'
+    icon: 'pi pi-star',
+    url: ''
   },
   {
     label: 'Pricing',
-    icon: 'pi pi-dollar'
+    icon: 'pi pi-dollar',
+    url: ''
   },
   {
     label: 'Contact',
-    icon: 'pi pi-envelope'
+    icon: 'pi pi-envelope',
+    url: ''
   }])
 let visibleRight = ref(false)
 const handleResize = () => {
@@ -50,9 +54,15 @@ onBeforeUnmount(() => {
       <nav v-if="!store.isMobile" class="items">
         <ul class="flex align-items-center justify-content-center list-none gap-4">
           <li v-for="item in items" :key="item.label">
-            <a href="/" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline ">
+            <a :href="'/'+item.label" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline">
               <i :class="item.icon"></i>
               <span>{{item.label}}</span>
+            </a>
+          </li>
+          <li>
+            <a v-if="authStore.isToken()" href="dashboard" class="isSelected flex align-items-center p-2 border-round gap-1 hover:text-black-alpha-80 no-underline">
+              <i class="pi pi-crown"></i>
+              <span>Dashboard</span>
             </a>
           </li>
         </ul>
@@ -87,17 +97,6 @@ onBeforeUnmount(() => {
 .items a:hover{
   background: #bbbbbb;
 }
-.p-button-contrast{
-  background: var(--fourth-color);
-  color: var(--second-color);
-  border-color: var(--second-color);
-}
-
-.p-button-contrast:not(:disabled):hover{
-  background: #b2aea5;
-  color: #44342e;
-  border-color: #44342e;
-}
 
 .button-hover{
   background: var(--second-color);
@@ -106,6 +105,12 @@ onBeforeUnmount(() => {
 }
 
 .button-hover:not(:disabled):hover{
+  background: var(--first-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
+}
+
+.isSelected{
   background: var(--first-color);
   color: var(--fourth-color);
   border-color: var(--fourth-color);
