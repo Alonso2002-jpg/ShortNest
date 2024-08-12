@@ -9,6 +9,7 @@ export const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormal
     const token = localStorage.getItem('token');
     const authStore = useAuthStore();
     if (!token) {
+        console.log(from.meta)
         next('/login');
     } else {
         try {
