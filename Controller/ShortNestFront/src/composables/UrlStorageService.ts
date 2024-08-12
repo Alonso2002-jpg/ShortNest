@@ -1,5 +1,6 @@
 ﻿import axios from "axios";
 import {UrlStorage} from "../models/UrlStorage.ts";
+import {PagedResult} from "../models/PagedResult.ts";
 
 export class UrlStorageService {
   
@@ -11,6 +12,14 @@ export class UrlStorageService {
   
   public async getUrlStorageById(id: string) {
     return await axios.get<UrlStorage>(`${this.route}/${id}`);
+  }
+  
+  public async getUrlStorageByUserId(){
+    return await axios.get<UrlStorage[]>(`${this.route}/User`);
+  }
+
+  public async getUrlStorageByUserIdPaginate(pageResult: PagedResult<UrlStorage>){
+    return await axios.get<PagedResult<UrlStorage>>(`${this.route}/User/Paginate?page=${pageResult.page}&pageSize=${pageResult.pageSize}`);
   }
   
   public async getUrlStorageByShortUrl(shortUrl: string) {
@@ -26,6 +35,10 @@ export class UrlStorageService {
     }
     
     public async deleteUrlStorage(id: string) {
-        return await axios.delete<UrlStorage>(`${this.route}/${id}`);
+        return await axios.delete(`${this.route}/${id}`);
     }
+
+  public async checkSitePass(urlShort: string, sitePass: string) {
+    return await axios.post(`${this.route}/CheckSitePass`, { urlShort, sitePass });
+  }
 }

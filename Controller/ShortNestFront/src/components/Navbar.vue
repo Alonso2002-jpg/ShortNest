@@ -14,19 +14,23 @@ const redirectTo = (path:string) => {
 const items = ref([
   {
     label: 'Home',
-    icon: 'pi pi-home'
+    icon: 'pi pi-home',
+    url: ''
   },
   {
     label: 'Features',
-    icon: 'pi pi-star'
+    icon: 'pi pi-star',
+    url: ''
   },
   {
     label: 'Pricing',
-    icon: 'pi pi-dollar'
+    icon: 'pi pi-dollar',
+    url: ''
   },
   {
     label: 'Contact',
-    icon: 'pi pi-envelope'
+    icon: 'pi pi-envelope',
+    url: ''
   }])
 let visibleRight = ref(false)
 const handleResize = () => {
@@ -50,9 +54,15 @@ onBeforeUnmount(() => {
       <nav v-if="!store.isMobile" class="items">
         <ul class="flex align-items-center justify-content-center list-none gap-4">
           <li v-for="item in items" :key="item.label">
-            <a href="/" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline ">
+            <a :href="'/'+item.label" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline">
               <i :class="item.icon"></i>
               <span>{{item.label}}</span>
+            </a>
+          </li>
+          <li>
+            <a v-if="authStore.isToken()" href="dashboard" class="isSelected flex align-items-center p-2 border-round gap-1 hover:text-black-alpha-80 no-underline">
+              <i class="pi pi-crown"></i>
+              <span>Dashboard</span>
             </a>
           </li>
         </ul>
@@ -66,11 +76,12 @@ onBeforeUnmount(() => {
           <p><a href="/"> <i class="pi pi-star"></i> Features</a></p>
           <p><a href="/"> <i class="pi pi-dollar"></i> Pricing</a></p>
           <p><a href="/"> <i class="pi pi-envelope"></i> Contact</a></p>
-          <div v-if="!token" class="flex justify-content-between my-8">
+          <p class="isSelected py-2 border-round-3xl"><a href="/dashboard" class="flex justify-content-center align-items-center gap-2"> <i class="pi pi-crown"></i> Dashboard</a></p>
+          <div v-if="store.isMobile && !token" class="flex justify-content-between my-8">
             <Button type="button" severity="secondary" label="Login" @click="redirectTo('/login')" icon="pi pi-user"/>
             <Button type="button" severity="secondary" label="Register" @click="redirectTo('/register')" icon="pi pi-users" />
           </div>
-          <div v-if="token" class="flex justify-content-center my-8">
+          <div v-if="store.isMobile && token" class="flex justify-content-center align-items-center my-8 gap-2">
             <Button type="button" severity="secondary" label="Logout" @click="authStore.clearAuth();redirectTo('/login');" icon="pi pi-sign-out" />
           </div>
         </div>
@@ -90,17 +101,6 @@ onBeforeUnmount(() => {
 .items a:hover{
   background: #bbbbbb;
 }
-.p-button-contrast{
-  background: var(--fourth-color);
-  color: var(--second-color);
-  border-color: var(--second-color);
-}
-
-.p-button-contrast:not(:disabled):hover{
-  background: #b2aea5;
-  color: #44342e;
-  border-color: #44342e;
-}
 
 .button-hover{
   background: var(--second-color);
@@ -109,6 +109,12 @@ onBeforeUnmount(() => {
 }
 
 .button-hover:not(:disabled):hover{
+  background: var(--first-color);
+  color: var(--fourth-color);
+  border-color: var(--fourth-color);
+}
+
+.isSelected{
   background: var(--first-color);
   color: var(--fourth-color);
   border-color: var(--fourth-color);

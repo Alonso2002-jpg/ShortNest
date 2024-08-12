@@ -8,6 +8,7 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import Button from "primevue/button";
 import "primeicons/primeicons.css";
+
 import Menubar from "primevue/menubar";
 import Image from "primevue/image";
 import Card from "primevue/card";
@@ -20,6 +21,17 @@ import Password from "primevue/password";
 import Divider from 'primevue/divider';
 import Checkbox from "primevue/checkbox";
 import axios from "axios";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import DataView from "primevue/dataview";
+import SelectButton from "primevue/selectbutton";
+import ConfirmDialog from "primevue/confirmdialog";
+import ConfirmationService from 'primevue/confirmationservice';
+import ProgressSpinner from 'primevue/progressspinner';
+import ToastService from 'primevue/toastservice';
+import Toast from "primevue/toast";
+import Dialog from 'primevue/dialog';
+import ToggleSwitch from 'primevue/toggleswitch';
 
 if(window.localStorage.getItem('token') !== null){
     const token = window.localStorage.getItem('token');
@@ -42,10 +54,18 @@ app.use(router)
 app.use(createPinia())
 app.use(PrimeVue, {
     theme: {
-        preset: Aura
+        preset: Aura,
+        options: {
+            prefix: 'p',
+            darkModeSelector: 'system',
+            cssLayer: false
+        }
     }
 });
+app.use(ConfirmationService);
+app.use(ToastService);
 app.component('Button', Button);
+app.component('SelectButton', SelectButton);
 app.component('Menubar', Menubar);
 app.component('Image', Image);
 app.component('Card', Card);
@@ -55,5 +75,13 @@ app.component('Drawer', Drawer)
 app.component('FloatLabel', FloatLabel)
 app.component('Divider', Divider)
 app.component('Checkbox', Checkbox)
+app.component('DataTable', DataTable)
+app.component('DataView', DataView)
+app.component('Column', Column)
+app.component('ConfirmDialog', ConfirmDialog)
+app.component('Toast', Toast)
+app.component('ProgressSpinner', ProgressSpinner)
+app.component('Dialog', Dialog)
+app.component('ToggleSwitch', ToggleSwitch)
 
 app.mount('#app')

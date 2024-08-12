@@ -1,6 +1,8 @@
 ﻿using Context.Mappers;
 using Context.Models;
 using Context.ViewModels;
+using Context.ViewModels.Pagination;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Exceptions;
 using AppContext = Context.Context.AppContext;
 
@@ -32,6 +34,27 @@ public class UrlStorageService
         }
         
         return _mapper.ToResponse(urlStorageFind);
+    }
+    
+    public List<UrlStorageResponse> GetByUserId(Guid UserId)
+    {
+        return _context.UrlStorages.Where(x => x.UserId == UserId)
+            .Select(x => _mapper.ToResponse(x)).ToList();
+        
+    }
+    
+    public PagedResult<UrlStorageResponse> GetByUserIdPaginate(Guid UserId, int Page, int PageSize)
+    {
+        var urlStorage = _context.UrlStorages.Where(x => x.UserId == UserId);
+        var total = urlStorage.Count();
+        var items = urlStorage.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+        return new PagedResult<UrlStorageResponse>
+        {
+            Items = items.Select(x => _mapper.ToResponse(x)).ToList(),
+            Page = Page,
+            PageSize = PageSize,
+            TotalCount = total
+        };
     }
 
     public UrlStorageResponse GetByUrlReal(string UrlReal)
@@ -93,5 +116,12 @@ public class UrlStorageService
 
         _context.UrlStorages.Remove(urlStorage);
         _context.SaveChanges();
+    }
+
+    public bool CheckValidSitePass(string sitePass, string urlShortest)
+    {
+        var urlShort = _context.UrlStorages.FirstOrDefault(x => x.UrlShortest == urlShortest);
+
+        return BCrypt.Net.BCrypt.Verify(sitePass, urlShort.SitePass);
     }
 }

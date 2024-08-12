@@ -5,9 +5,9 @@ import {Register} from "../models/Register.ts";
 import {Login} from "../models/Login.ts";
 import {TokenResponse} from "../models/TokenResponse.ts";
 import {getAuth, GoogleAuthProvider, signInWithPopup, TwitterAuthProvider} from "firebase/auth";
-
 export const useAuthStore = defineStore('auth',{
     state: () => ({
+        roles: ref(['']),
         token:ref(''),
         route: `${import.meta.env.VITE_BASE_URL}/Auth`,
         googleProvider: new GoogleAuthProvider(),
@@ -64,6 +64,12 @@ export const useAuthStore = defineStore('auth',{
         setToken(token:string){
             this.token = token;
             window.localStorage.setItem('token', this.token);
+        },
+        setRoles(roles:string[]){
+            this.roles = roles;
+        },
+        isToken(){
+            return localStorage.getItem('token') !== null;
         },
         clearAuth() {
             this.token = '';

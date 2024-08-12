@@ -4,7 +4,7 @@ import { onMounted,ref, watch } from "vue";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 
-const withoutComple = ['/register', '/login'];
+const withoutComple = ['/register', '/login', '/dashboard'];
 const router = useRouter();
 const withComple = ref(false);
 
