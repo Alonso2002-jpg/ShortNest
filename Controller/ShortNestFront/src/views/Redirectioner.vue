@@ -63,8 +63,8 @@ onBeforeUnmount(() => {
   <h1>URL no encontrada</h1>
   </div>
   <div v-if="routeExist && urlStorage.withPass" class="flex flex-column gap-3 justify-content-center align-items-center" style="height: 77.5lvh">
-    <p class="font-semibold text-xl"><i class="pi pi-lock mr-3 text-red-600"></i>This URL is protected, enter the password to continue</p>
-    <Password v-model="sitePass" placeholder="Enter the password to access" toggleMask inputStyle="width: 20lvw;"/>
+    <p class="font-semibold" :class="{'text-xl':!store.isMobile, 'text-sm':store.isMobile}"><i class="pi pi-lock mr-3 text-red-600"></i>This URL is protected, enter the password to continue</p>
+    <Password v-model="sitePass" placeholder="Enter the password to access" toggleMask inputStyle="width: 40lvh;"/>
     <small v-if="!corrPass" class="text-red-700">Incorrect Password- Try again</small>
     <Button v-if="sitePass != ''" @click="checkSitePass()" type="button" severity="secondary" label="Try to access" size="medium" icon="pi pi-unlock"/>
   </div>

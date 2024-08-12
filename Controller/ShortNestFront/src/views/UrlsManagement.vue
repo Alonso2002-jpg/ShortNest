@@ -1,26 +1,38 @@
 ﻿<script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import {UrlStorageService} from "../composables/UrlStorageService.ts";
 import {UrlStorage} from "../models/UrlStorage.ts";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
+import {useDeviceStore} from "../stores/useDeviceStore.ts";
+const deviceStore = useDeviceStore()
+
+const handleResize = () => {
+  deviceStore.updateDeviceType();
+};
+
+onMounted(async () => {
+  const response = await urlStorageService.getUrlStorageByUserId()
+  urlsByUser.value = response.data
+  isLoading.value = false
+  window.addEventListener('resize', handleResize);
+  handleResize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 
 const isLoading = ref(true)
 const visible = ref(false)
 const toEdit = ref(new UrlStorage())
 const urlsByUser = ref([new UrlStorage()])
 const urlStorageService = new UrlStorageService()
-
 const confirm = useConfirm();
 const toast = useToast();
 
 const frontUrl = import.meta.env.VITE_FRONT_URL
 
-onMounted(async () => {
-  const response = await urlStorageService.getUrlStorageByUserId()
-  urlsByUser.value = response.data
-  isLoading.value = false
-})
 
 const deleteUrlStorage = async (id: string) => {
   confirm.require({
@@ -97,76 +109,145 @@ const dataStyles ={
 
 <template>
   <div class="bg-white-alpha-50 flex flex-column align-items-center pt-5 h-full">
-    <h1 class="text-4xl">URL's Management</h1>
-    <p class="text-2xl">Here only the URLs created through your account appear.</p>
+    <h1 :class="{'text-4xl':!deviceStore.isMobile, 'text-2xl':deviceStore.isMobile}">URL's Management</h1>
+    <p :class="{'text-2xl':!deviceStore.isMobile, 'text-lg text-center':deviceStore.isMobile}">Here only the URLs created through your account appear.</p>
     <Divider />
     <Toast />
     <ConfirmDialog></ConfirmDialog>
-    <DataTable v-if="urlsByUser.length>0 && isLoading == false" :value="urlsByUser" stripedRows tableStyle="min-width: 60lvw">
-      <Column field="urlReal" header="Real URL" :headerStyle="headerStyles" :bodyStyle="dataStyles"></Column>
-      <Column field="urlShortest" header="Shortest URL" :headerStyle="headerStyles" :bodyStyle="dataStyles"></Column>
-      <Column header="Actions" :headerStyle="headerStyles">
-        <template #body="slotProps" >
-          <div class="flex justify-content-left align-items-center gap-3">
-            <Button icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2" @click="goToEdit(slotProps.data)"></Button>
-            <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteUrlStorage(slotProps.data.id)"></Button>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
-
-    <div v-else-if="urlsByUser.length <= 0 && !isLoading" class="flex flex-column justify-content-center align-items-center h-full">
-      <h1 class="text-4xl">No tiene URLs registradas</h1>
-      <div class="my-3 flex align-items-center justify-content-center">
-        <a href="/" class="homeButton flex align-items-center p-2 px-5 border-round gap-1 hover:text-white-alpha-80 no-underline">
-          <i class="pi pi-home"></i>
-          <span>Back to Home to Short a URL</span>
-        </a>
+    <div v-if="!deviceStore.isMobile">
+      <div v-if="urlsByUser.length>0 && isLoading == false">
+          <DataTable :value="urlsByUser" paginator :rows="5" stripedRows tableStyle="min-width: 60lvw">
+            <Column field="urlReal" header="Real URL" :headerStyle="headerStyles" :bodyStyle="dataStyles"></Column>
+            <Column field="urlShortest" header="Shortest URL" :headerStyle="headerStyles" :bodyStyle="dataStyles"></Column>
+            <Column header="Actions" :headerStyle="headerStyles">
+              <template #body="slotProps" >
+                <div class="flex justify-content-left align-items-center gap-3">
+                  <Button icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2" @click="goToEdit(slotProps.data)"></Button>
+                  <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteUrlStorage(slotProps.data.id)"></Button>
+                </div>
+              </template>
+            </Column>
+          </DataTable>
       </div>
-    </div>
-
-    <div v-else-if="isLoading" class="flex justify-content-center align-items-center h-full">
-      <ProgressSpinner
-          style="width: 10lvw; height: 100%"
-          strokeWidth="4"
-      />
-    </div>
-
-    <div class="card flex justify-content-center">
-      <Dialog v-model:visible="visible" modal header="Edit URL" :style="{ width: '35rem' }">
-        <template #header>
-          <div class="inline-flex align-items-center justify-content-center gap-2">
-            <i class="pi pi-link"></i>
-            <span class="font-bold whitespace-nowrap text-xl">Update your URL</span>
-          </div>
-        </template>
-        <span class="text-surface-500 dark:text-surface-400 block mb-6">Update the data of your shortened URL, what the user will see, and the destination URL.</span>
-        <div class="flex align-items-center gap-4 mb-4">
-          <label for="realurl" class="font-semibold w-7rem">Original URL</label>
-          <InputText id="realurl" class="flex-auto" autocomplete="off" v-model:="toEdit.urlReal"/>
+      <div v-else-if="urlsByUser.length <= 0 && !isLoading" class="flex flex-column justify-content-center align-items-center">
+        <h1 class="text-4xl">No Registered URLs</h1>
+        <div class="my-3 flex align-items-center justify-content-center">
+          <a href="/" class="homeButton flex align-items-center p-2 px-5 border-round gap-1 hover:text-white-alpha-80 no-underline">
+            <i class="pi pi-home"></i>
+            <span>Back to Home to Short a URL</span>
+          </a>
         </div>
-        <div class="flex align-items-center gap-5 mb-4">
-          <label for="shorturl" class="font-semibold w-9rem">Shortest URL</label>
-          <div class="flex flex-column w-full">
-            <InputText id="shorturl" class="flex-auto" autocomplete="off" disabled="true" v-model="toEdit.urlShortest"/>
-            <small>(The shortened URL will be: : {{frontUrl + '/' +toEdit.urlShortest}})</small>
+      </div>
+
+      <div v-else-if="isLoading" class="flex justify-content-center align-items-center h-full">
+        <ProgressSpinner
+            style="width: 10lvw; height: 100%"
+            strokeWidth="4"
+        />
+      </div>
+
+      <div class="card flex justify-content-center">
+        <Dialog v-model:visible="visible" modal header="Edit URL" :style="{ width: '35rem' }">
+          <template #header>
+            <div class="inline-flex align-items-center justify-content-center gap-2">
+              <i class="pi pi-link"></i>
+              <span class="font-bold whitespace-nowrap text-xl">Update your URL</span>
+            </div>
+          </template>
+          <span class="text-surface-500 dark:text-surface-400 block mb-6">Update the data of your shortened URL, what the user will see, and the destination URL.</span>
+          <div class="flex align-items-center gap-4 mb-4">
+            <label for="realurl" class="font-semibold w-7rem">Original URL</label>
+            <InputText id="realurl" class="flex-auto" autocomplete="off" v-model:="toEdit.urlReal"/>
           </div>
-        </div>
-        <div class="flex align-items-center gap-5 mb-6">
-          <label for="secureurl" class="font-semibold w-9rem">Secure URL</label>
-          <div class="flex gap-4 align-items-center w-full">
-            <ToggleSwitch v-model="toEdit.withPass" />
-            <div v-if="toEdit.withPass" class="flex flex-column w-full">
-              <Password v-model="toEdit.sitePass" placeholder="Site Password" toggleMask inputStyle="width: 16lvw;"/>
-              <small>(Insert or Update your Site Password)</small>
+          <div class="flex align-items-center gap-5 mb-4">
+            <label for="shorturl" class="font-semibold w-9rem">Shortest URL</label>
+            <div class="flex flex-column w-full">
+              <InputText id="shorturl" class="flex-auto" autocomplete="off" disabled="true" v-model="toEdit.urlShortest"/>
+              <small>(The shortened URL will be: : {{frontUrl + '/' +toEdit.urlShortest}})</small>
             </div>
           </div>
+          <div class="flex align-items-center gap-5 mb-6">
+            <label for="secureurl" class="font-semibold w-9rem">Secure URL</label>
+            <div class="flex gap-4 align-items-center w-full">
+              <ToggleSwitch v-model="toEdit.withPass" />
+              <div v-if="toEdit.withPass" class="flex flex-column w-full">
+                <Password v-model="toEdit.sitePass" placeholder="Site Password" toggleMask inputStyle="width: 16lvw;"/>
+                <small>(Insert or Update your Site Password)</small>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-content-end gap-2">
+            <Button type="button" label="Cancel" severity="secondary" @click="visible=false"></Button>
+            <Button type="button" severity="contrast" label="Save" @click="updateUrlStorage(toEdit.id)" />
+          </div>
+        </Dialog>
+      </div>
+    </div>
+    <div v-else-if="deviceStore.isMobile">
+      <div v-if="urlsByUser.length>0 && !isLoading">
+        <DataTable v-if="urlsByUser.length>0 && !isLoading" :value="urlsByUser" paginator :rows="5" stripedRows tableStyle="min-width: 60lvw">
+          <Column field="urlReal" header="Real URL" :headerStyle="headerStyles" :bodyStyle="dataStyles"></Column>
+          <Column header="Actions" :headerStyle="headerStyles">
+            <template #body="slotProps" >
+              <div class="flex justify-content-left align-items-center gap-3">
+                <Button icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2" @click="goToEdit(slotProps.data)"></Button>
+                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteUrlStorage(slotProps.data.id)"></Button>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+        <div class="card flex justify-content-center">
+          <Dialog v-model:visible="visible" modal header="Edit URL" :style="{ width: '85lvw' }">
+            <template #header>
+              <div class="inline-flex align-items-center justify-content-center gap-2">
+                <i class="pi pi-link"></i>
+                <span class="font-bold whitespace-nowrap text-xl">Update your URL</span>
+              </div>
+            </template>
+            <span class="text-surface-500 dark:text-surface-400 block mb-6">Update the data of your shortened URL, what the user will see, and the destination URL.</span>
+            <div class="flex align-items-center gap-4 mb-4">
+              <label for="realurl" class="font-semibold w-7rem">Original URL</label>
+              <InputText id="realurl" class="flex-auto" autocomplete="off" v-model:="toEdit.urlReal"/>
+            </div>
+            <div class="flex align-items-center gap-5 mb-4">
+              <label for="shorturl" class="font-semibold w-9rem">Shortest URL</label>
+              <div class="flex flex-column w-full">
+                <InputText id="shorturl" class="flex-auto" autocomplete="off" disabled="true" v-model="toEdit.urlShortest"/>
+                <small>(The shortened URL will be: : {{frontUrl + '/' +toEdit.urlShortest}})</small>
+              </div>
+            </div>
+            <div class="flex align-items-center gap-5 mb-6">
+              <label for="secureurl" class="font-semibold w-9rem">Secure URL</label>
+              <div class="flex gap-4 align-items-center w-full">
+                <ToggleSwitch v-model="toEdit.withPass" />
+                <div v-if="toEdit.withPass" class="flex flex-column w-full">
+                  <Password v-model="toEdit.sitePass" placeholder="Site Password" toggleMask :inputStyle="{'width: 16lvw':!deviceStore.isMobile}"/>
+                  <small>(Insert or Update your Site Password)</small>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-content-end gap-2">
+              <Button type="button" label="Cancel" severity="secondary" @click="visible=false"></Button>
+              <Button type="button" severity="contrast" label="Save" @click="updateUrlStorage(toEdit.id)" />
+            </div>
+          </Dialog>
         </div>
-        <div class="flex justify-content-end gap-2">
-          <Button type="button" label="Cancel" severity="secondary" @click="visible=false"></Button>
-          <Button type="button" severity="contrast" label="Save" @click="updateUrlStorage(toEdit.id)" />
+      </div>
+      <div v-else-if="urlsByUser.length <= 0 && !isLoading" class="flex flex-column justify-content-center align-items-center">
+        <h1 :class="{'text-4xl':!deviceStore.isMobile, 'text-2xl':deviceStore.isMobile}">No Registered URLs</h1>
+        <div class="my-3 flex align-items-center justify-content-center">
+          <a href="/" class="homeButton flex align-items-center p-2 px-5 border-round gap-1 hover:text-white-alpha-80 no-underline">
+            <i class="pi pi-home"></i>
+            <span>Back to Home to Short a URL</span>
+          </a>
         </div>
-      </Dialog>
+      </div>
+      <div v-else-if="isLoading" class="flex justify-content-center align-items-center h-full">
+        <ProgressSpinner
+            :style="{ width: deviceStore.isMobile ? '30lvw':'10lvw', height: deviceStore.isMobile ? '50lvh':'100%' }"
+            strokeWidth="4"
+        />
+      </div>
     </div>
   </div>
 </template>

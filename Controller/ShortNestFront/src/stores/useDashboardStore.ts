@@ -7,8 +7,8 @@ export const useDashboardStore = defineStore('dashboard',{
     }),
     actions: {
         setSelectedOption(option:string){
-            this.selectedOption = option;
-            console.log(this.selectedOption)
+            console.log(option)
+            option != 'home' ? this.selectedOption = option : window.location.href = '/';
         }
     }
 });

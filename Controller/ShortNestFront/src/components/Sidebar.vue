@@ -1,21 +1,33 @@
 ﻿<script setup lang="ts">
 import SidebarComponent from "./SidebarComponent.vue";
 
+import {useDeviceStore} from "../stores/useDeviceStore.ts";
+import {onBeforeUnmount, onMounted} from "vue";
+
+const deviceStore = useDeviceStore()
+
+const handleResize = () => {
+  deviceStore.updateDeviceType();
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  handleResize();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <template>
-    <div class="sidebar" >
-<!--      <SidebarComponent  :compName="'General Stats'" :icon="'pi pi-chart-bar'"></SidebarComponent>-->
+    <div v-if="!deviceStore.isMobile" class="sidebar" >
      <div>
        <SidebarComponent :compName="'My URLs'" :icon="'pi pi-link'" :selected-option="'urls'"></SidebarComponent>
-       <SidebarComponent :compName="'My Account'" :icon="'pi pi-user'" :selected-option="'account'"></SidebarComponent>
+       <SidebarComponent :compName="'Dashboard (In Progress)'" :icon="'pi pi-chart-bar'" :notClickeable="true" :selected-option="'dashboard'"></SidebarComponent>
+       <SidebarComponent :compName="'My Account (In Progress)'" :icon="'pi pi-user'" :notClickeable="true" :selected-option="'account'"></SidebarComponent>
      </div>
-      <div class="my-3 flex align-items-center justify-content-center">
-        <a href="/" class="homeButton flex align-items-center p-2 px-5 border-round gap-1 hover:text-white-alpha-80 no-underline">
-          <i class="pi pi-home"></i>
-          <span>Home</span>
-        </a>
-      </div>
+      <SidebarComponent :compName="'Home'" :icon="'pi pi-home'" :selected-option="'home'"></SidebarComponent>
     </div>
 </template>
 

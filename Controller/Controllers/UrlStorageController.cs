@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Context.ViewModels;
+using Context.ViewModels.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
@@ -35,7 +36,7 @@ public class UrlStorageController : ControllerBase
         return Ok(_urlStorageService.GetById(id));
     }
 
-    [HttpGet("user")]
+    [HttpGet("User")]
     [Authorize(Roles = "USER,ADMIN")]
     public ActionResult<UrlStorageResponse> GetByUserId()
     {
@@ -48,6 +49,19 @@ public class UrlStorageController : ControllerBase
         }
         
         return Ok(_urlStorageService.GetByUserId(userId));
+    }
+    
+    [HttpGet("User/Paginate")]
+    public ActionResult<PagedResult<UrlStorageResponse>> GetPaged(int page = 1, int pageSize = 10)
+    {
+        var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var userId = new Guid();
+        if (token != "")
+        {
+            var username = GetUsername(token);
+            userId = _userService.GetByUsername(username).Id ?? new Guid();
+        }
+        return Ok(_urlStorageService.GetByUserIdPaginate(userId, page, pageSize));
     }
     
     [HttpGet("urlReal/{urlReal}")]

@@ -76,9 +76,13 @@ onBeforeUnmount(() => {
           <p><a href="/"> <i class="pi pi-star"></i> Features</a></p>
           <p><a href="/"> <i class="pi pi-dollar"></i> Pricing</a></p>
           <p><a href="/"> <i class="pi pi-envelope"></i> Contact</a></p>
-          <div class="flex justify-content-between my-8">
-            <Button type="button" severity="secondary" label="Login" icon="pi pi-user"/>
-            <Button type="button" severity="secondary" label="Register" icon="pi pi-users" />
+          <p class="isSelected py-2 border-round-3xl"><a href="/dashboard" class="flex justify-content-center align-items-center gap-2"> <i class="pi pi-crown"></i> Dashboard</a></p>
+          <div v-if="store.isMobile && !token" class="flex justify-content-between my-8">
+            <Button type="button" severity="secondary" label="Login" @click="redirectTo('/login')" icon="pi pi-user"/>
+            <Button type="button" severity="secondary" label="Register" @click="redirectTo('/register')" icon="pi pi-users" />
+          </div>
+          <div v-if="store.isMobile && token" class="flex justify-content-center align-items-center my-8 gap-2">
+            <Button type="button" severity="secondary" label="Logout" @click="authStore.clearAuth();redirectTo('/login');" icon="pi pi-sign-out" />
           </div>
         </div>
       </Drawer>

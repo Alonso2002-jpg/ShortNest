@@ -1,5 +1,6 @@
 ﻿import axios from "axios";
 import {UrlStorage} from "../models/UrlStorage.ts";
+import {PagedResult} from "../models/PagedResult.ts";
 
 export class UrlStorageService {
   
@@ -14,7 +15,11 @@ export class UrlStorageService {
   }
   
   public async getUrlStorageByUserId(){
-    return await axios.get<UrlStorage[]>(`${this.route}/user`);
+    return await axios.get<UrlStorage[]>(`${this.route}/User`);
+  }
+
+  public async getUrlStorageByUserIdPaginate(pageResult: PagedResult<UrlStorage>){
+    return await axios.get<PagedResult<UrlStorage>>(`${this.route}/User/Paginate?page=${pageResult.page}&pageSize=${pageResult.pageSize}`);
   }
   
   public async getUrlStorageByShortUrl(shortUrl: string) {

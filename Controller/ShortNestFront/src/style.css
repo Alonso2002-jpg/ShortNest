@@ -34,3 +34,6 @@ body .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
     background-color: transparent;
 }
 
+body .p-paginator-page.p-paginator-page-selected{
+    background-color: var(--third-color);
+}
