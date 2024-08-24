@@ -15,22 +15,22 @@ const items = ref([
   {
     label: 'Home',
     icon: 'pi pi-home',
-    url: ''
+    url: '/'
   },
   {
     label: 'Features',
     icon: 'pi pi-star',
-    url: ''
+    url: '/'
   },
   {
     label: 'Pricing',
     icon: 'pi pi-dollar',
-    url: ''
+    url: '/'
   },
   {
     label: 'Contact',
     icon: 'pi pi-envelope',
-    url: ''
+    url: '/'
   }])
 let visibleRight = ref(false)
 const handleResize = () => {
@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
       <nav v-if="!store.isMobile" class="items">
         <ul class="flex align-items-center justify-content-center list-none gap-4">
           <li v-for="item in items" :key="item.label">
-            <a :href="'/'+item.label" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline">
+            <a :href="'/'" class="flex align-items-center p-2 border-round gap-1 text-black-alpha-80 no-underline">
               <i :class="item.icon"></i>
               <span>{{item.label}}</span>
             </a>
