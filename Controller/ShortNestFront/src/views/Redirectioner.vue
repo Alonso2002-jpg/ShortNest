@@ -56,11 +56,11 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="routeExist && !urlStorage.withPass" class="flex flex-column justify-content-center align-items-center" style="height: 77.5lvh">
-    <p :class="{'text-xl':!store.isMobile, 'text-sm':store.isMobile}">Haz click en el siguiente boton para acceder a tu ruta!</p>
+    <p :class="{'text-xl':!store.isMobile, 'text-sm':store.isMobile}">Click on the following button to access your route!</p>
     <Button @click="seeURL" type="button" severity="secondary" label="Continue" size="large" icon="pi pi-play"/>
   </div>
   <div v-if="!routeExist" class="flex flex-column justify-content-center align-items-center" style="height: 77.5lvh">
-  <h1>URL no encontrada</h1>
+  <h1>URL not found</h1>
   </div>
   <div v-if="routeExist && urlStorage.withPass" class="flex flex-column gap-3 justify-content-center align-items-center" style="height: 77.5lvh">
     <p class="font-semibold" :class="{'text-xl':!store.isMobile, 'text-sm':store.isMobile}"><i class="pi pi-lock mr-3 text-red-600"></i>This URL is protected, enter the password to continue</p>
